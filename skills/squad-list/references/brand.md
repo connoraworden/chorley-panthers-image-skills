@@ -33,3 +33,8 @@
 - Featured name: thin monoline handwritten signature script
 - Thin white rules frame the top and bottom
 - Portrait 4:5 for Instagram, 1080 x 1350 or larger
+
+## Logo files
+
+- `assets/club-crest.png` is rendered from the club's SVG badge at chorley-panthers.co.uk
+- `assets/sponsor.png` is a reversed version for dark backgrounds, made from a small public copy of the FI logo. Swap in the sponsor's official reversed logo when you have it

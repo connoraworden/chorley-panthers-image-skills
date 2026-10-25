@@ -8,7 +8,7 @@ The skills use the open `SKILL.md` format, so they work in OpenAI Codex, ChatGPT
 
 | Skill | What it does |
 | --- | --- |
-| [`squad-list`](skills/squad-list/SKILL.md) | Rugby league squad list graphic for a fixture, in the house template |
+| [`squad-list`](skills/squad-list/SKILL.md) | Builds the rugby league squad list graphic from real photos and logos using a template script, not image generation |
 
 ## Install
 
