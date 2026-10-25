@@ -53,7 +53,7 @@ Re-run the install command, or `git pull` and copy the folder again.
 This repo is public. Anything in a skill's `references/` folder can be seen by anyone.
 
 - Only add photos the club has consent to publish.
-- No identifiable junior players.
+- Junior players only where the club already has consent to publish their photos, as with the default background from the club website.
 - Follow the club photography policy and RFL safeguarding guidance.
 
 ## Contributing
