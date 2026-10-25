@@ -1,6 +1,6 @@
 # Chorley Panthers Image Skills
 
-Agent skills for generating club images that look like Chorley Panthers rather than generic AI rugby. They're built from real club photos, kit details and a house style guide.
+Agent skills for generating club images that look like Chorley Panthers rather than generic AI rugby league. They're built from real club photos, kit details and a house style guide.
 
 The skills use the open `SKILL.md` format, so they work in OpenAI Codex, ChatGPT (where skills are available on your plan) and Claude.
 
@@ -8,7 +8,7 @@ The skills use the open `SKILL.md` format, so they work in OpenAI Codex, ChatGPT
 
 | Skill | What it does |
 | --- | --- |
-| [`club-images`](skills/club-images/SKILL.md) | Turns a request into an on-brand image prompt and generates it |
+| [`squad-list`](skills/squad-list/SKILL.md) | Rugby league squad list graphic for a fixture, in the house template |
 
 ## Install
 
@@ -31,18 +31,18 @@ Then copy the skill folder into your agent's skills directory.
 Codex:
 
 ```bash
-mkdir -p ~/.codex/skills && cp -R chorley-panthers-image-skills/skills/club-images ~/.codex/skills/
+mkdir -p ~/.codex/skills && cp -R chorley-panthers-image-skills/skills/squad-list ~/.codex/skills/
 ```
 
 Claude Code:
 
 ```bash
-mkdir -p ~/.claude/skills && cp -R chorley-panthers-image-skills/skills/club-images ~/.claude/skills/
+mkdir -p ~/.claude/skills && cp -R chorley-panthers-image-skills/skills/squad-list ~/.claude/skills/
 ```
 
 ### ChatGPT
 
-If your plan has skills, zip the `skills/club-images` folder and upload it in ChatGPT's skills settings.
+If your plan has skills, zip the `skills/squad-list` folder and upload it in ChatGPT's skills settings.
 
 ## Updating
 
@@ -50,11 +50,11 @@ Re-run the install command, or `git pull` and copy the folder again.
 
 ## Photos and safeguarding
 
-This repo is public. Anything in `references/` can be seen by anyone.
+This repo is public. Anything in a skill's `references/` folder can be seen by anyone.
 
 - Only add photos the club has consent to publish.
 - No identifiable junior players.
-- Follow the club photography policy and RFU safeguarding guidance.
+- Follow the club photography policy and RFL safeguarding guidance.
 
 ## Contributing
 
