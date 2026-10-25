@@ -28,9 +28,9 @@
 - Black background, with match photos in black and white and heavily darkened
 - White text only
 - Colour comes only from the featured player photo and the logos
-- Headline type: heavy condensed italic capitals, similar to Anton or Bebas Neue Bold Italic
-- Name lists: condensed sans serif with wide letter spacing, mixed case
-- Featured name: thin monoline handwritten signature script
+- Headline type: Anton, slanted to italic
+- Name lists, opponent line and small labels: Antonio, with wide letter spacing on names
+- Featured name: Brittany Signature by Creatype Studio. It is a paid font and must never be committed to this repo. If you have a licence, save it as `assets/fonts/BrittanySignature.ttf` in your installed copy of the skill and the script uses it. Otherwise it falls back to the bundled Hurricane
 - Thin white rules frame the top and bottom
 - Portrait 4:5 for Instagram, 1080 x 1350 or larger
 

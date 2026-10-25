@@ -26,7 +26,7 @@ Ask for anything missing. Do not guess any of these or fill them with placeholde
 | Squad | First team: in shirt number order, 1 to 13, then interchanges from 14. A team: names only |
 | Featured player | Full name, which must be in the squad |
 | Featured player photo | **Cut-out PNG with a transparent background**, chest up, in home kit. If they only have a normal photo, ask them to cut it out with remove.bg or Canva first |
-| Background photo | Real match action photo. It's converted to black and white and darkened automatically |
+| Background photo | Optional. Real match action photo. It's converted to black and white and darkened automatically. Defaults to `assets/background.jpg` |
 | Opponent crest | PNG, ideally with a transparent background |
 
 The Chorley Panthers crest and the sponsor logo are bundled in `assets/` as `club-crest.png` and `sponsor.png`.

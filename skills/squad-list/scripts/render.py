@@ -91,15 +91,25 @@ def fitted_cap(c, text, font, cap, max_w, tracking=0):
 def background(c, path):
     bg = ImageOps.grayscale(Image.open(path).convert("RGB"))
     bg = ImageOps.fit(bg, c.img.size, Image.LANCZOS, centering=(0.5, 0.3))
-    bg = ImageEnhance.Brightness(bg).enhance(0.32).convert("RGBA")
-    fade = Image.new("L", c.img.size, 0)
-    d = ImageDraw.Draw(fade)
-    top, bottom = c.px(1000), c.px(1850)
-    for y in range(c.img.height):
-        v = 255 if y < top else 0 if y > bottom else int(255 * (bottom - y) / (bottom - top))
-        d.line([(0, y), (c.img.width, y)], fill=v)
-    bg.putalpha(fade)
+    bg = ImageEnhance.Brightness(bg).enhance(0.22).convert("RGBA")
     c.img.alpha_composite(bg)
+    overlay(c, left=(1390, 1710), right=(885, 1390))
+
+
+def overlay(c, left, right):
+    w, h = c.img.size
+    ramp = Image.linear_gradient("L")
+    mask = Image.new("L", (w, h), 0)
+    step = 4
+    for x in range(0, w, step):
+        t = x / w
+        top = int(c.px(left[0] + (right[0] - left[0]) * t))
+        bottom = int(c.px(left[1] + (right[1] - left[1]) * t))
+        mask.paste(ramp.resize((step, max(1, bottom - top))), (x, top))
+        mask.paste(255, (x, bottom, x + step, h))
+    black = Image.new("RGBA", (w, h), (0, 0, 0, 255))
+    black.putalpha(mask)
+    c.img.alpha_composite(black)
 
 
 def player(c, path):
@@ -107,6 +117,8 @@ def player(c, path):
     box = im.getbbox()
     if box:
         im = im.crop(box)
+    if im.height > im.width * 1.4:
+        im = im.crop((0, 0, im.width, int(im.width * 1.4)))
     r = min(c.px(1420) / im.height, c.px(1060) / im.width)
     im = im.resize((int(im.width * r), int(im.height * r)), Image.LANCZOS)
     alpha = im.getchannel("A")
@@ -134,7 +146,7 @@ def date_runs(c, date, cap):
 
 def header(c, cfg):
     label = f"{cfg['opponent_short'].upper()} ({'H' if cfg['home'] else 'A'})"
-    w = c.text([(label, c.font("BebasNeue-Regular.ttf", 26), 0)], 800, 114, "center", 1, ITALIC)
+    w = c.text([(label, c.font("Antonio-Bold.ttf", 26), 0)], 800, 114, "center", 1, ITALIC)
     c.rule(LEFT, 800 - w / 2 - 70, 100)
     c.rule(800 + w / 2 + 70, RIGHT, 100)
 
@@ -145,7 +157,7 @@ def header(c, cfg):
     us = f"CHORLEY PANTHERS{suffix}"
     them = f"{cfg['opponent'].upper()}{suffix}"
     bold = ("Anton-Regular.ttf", 88)
-    light = ("BebasNeue-Regular.ttf", 62)
+    light = ("Antonio-Regular.ttf", 62)
     lines = [(us, bold), ("VS " + them, light)] if cfg["home"] else [(them, light), ("VS " + us, bold)]
     y = 152
     for text, (font, cap) in lines:
@@ -164,16 +176,16 @@ def header(c, cfg):
 def squad(c, cfg):
     names = cfg["squad"]
     first = cfg["team"] == "first"
-    rows = len(names) + (1.2 if first and len(names) > 13 else 0) + (0.4 if first and len(names) > 17 else 0)
+    rows = len(names) + (1 if first and len(names) > 13 else 0) + (0.4 if first and len(names) > 17 else 0)
     step = min(73, (1840 - 545) / rows)
     cap = min(46, step * 0.62)
-    font = c.font("BarlowCondensed-Medium.ttf", cap)
+    font = c.font("Antonio-Regular.ttf", cap)
     y = 545 + cap
     for i, name in enumerate(names, start=1):
         if first and i == 14:
-            y += step * 0.15
-            c.text([("INTERCHANGES", c.font("BebasNeue-Regular.ttf", cap * 0.68), 0)], LEFT, y, tracking=1, italic=ITALIC)
-            y += step * 1.05
+            label = cap * 0.85
+            c.text([("INTERCHANGES", c.font("Antonio-Bold.ttf", label), 0)], LEFT, y - (cap - label) / 2, tracking=2, italic=ITALIC)
+            y += step
         if first and i == 18:
             y += step * 0.4
         if first:
@@ -187,7 +199,7 @@ def squad(c, cfg):
 def signature(c, name):
     parts = name.split()
     first, last = " ".join(parts[:-1]), parts[-1]
-    script = "Hurricane-Regular.ttf"
+    script = "BrittanySignature.ttf" if (FONTS / "BrittanySignature.ttf").is_file() else "Hurricane-Regular.ttf"
     fcap = fitted_cap(c, first, script, 120, 380)
     lcap = fitted_cap(c, last, script, 175, 500)
     c.text([(first, c.font(script, fcap), 0)], RIGHT + 5, 1630, "right")
@@ -212,13 +224,13 @@ def main():
     cfg_path = Path(sys.argv[1]).resolve()
     cfg = json.loads(cfg_path.read_text())
     base = cfg_path.parent
-    missing = [k for k in ("team", "home", "opponent", "opponent_short", "date", "kickoff", "squad", "featured_player", "featured_photo", "background", "opponent_crest") if k not in cfg]
+    missing = [k for k in ("team", "home", "opponent", "opponent_short", "date", "kickoff", "squad", "featured_player", "featured_photo", "opponent_crest") if k not in cfg]
     if missing:
         sys.exit(f"missing fields: {', '.join(missing)}")
     if cfg["team"] not in ("first", "a"):
         sys.exit("team must be 'first' or 'a'")
     files = {
-        "background": base / cfg["background"],
+        "background": base / cfg.get("background", ASSETS / "background.jpg"),
         "featured_photo": base / cfg["featured_photo"],
         "opponent_crest": base / cfg["opponent_crest"],
         "club_crest": base / cfg.get("club_crest", ASSETS / "club-crest.png"),
@@ -232,7 +244,7 @@ def main():
         sys.exit("featured_photo has no transparent background. It must be a cut-out PNG")
 
     c = Canvas(int(cfg.get("scale", 2)))
-    background(c, base / cfg["background"])
+    background(c, files["background"])
     player(c, base / cfg["featured_photo"])
     header(c, cfg)
     squad(c, cfg)
